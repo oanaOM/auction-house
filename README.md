@@ -1,4 +1,4 @@
-===========================================
+
 Auction House
 ===========================================
 
@@ -8,7 +8,7 @@ Please see instructions.txt file to full description
 
 ===========================================
 
-** How to run it **
+## How to run it 
 
 1. Clone this repo 
 2. Run
@@ -16,7 +16,8 @@ Please see instructions.txt file to full description
 3. An output.txt file should be created under the root directory.
 4. Open the created file and check if the values are correct.
 
-Example:
+
+### Example:
 
 Input:
 
