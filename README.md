@@ -10,12 +10,11 @@ Please see instructions.txt file to full description
 
 ** How to run it **
 
-1. Clone this repo
-2. Run 
-```go run main.go```
+1. Clone this repo 
+2. Run
+   `go run main.go`
 3. An output.txt file should be created under the root directory.
 4. Open the created file and check if the values are correct.
-
 
 Example:
 
@@ -32,10 +31,7 @@ Input:
 20
 21|3|BID|tv_1|300.00
 
-
 Output:
 
 20|toaster_1|8|SOLD|12.50|3|20.00|7.50
 20|tv_1||UNSOLD|0|2|200.00|150.00
-
-
