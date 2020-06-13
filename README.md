@@ -2,9 +2,7 @@
 Auction House
 ===========================================
 
-Instructions
-
-Please see instructions.txt file to full description
+Please see full description in instructions.txt file 
 
 ===========================================
 
@@ -14,7 +12,7 @@ Please see instructions.txt file to full description
 2. Run
    `go run main.go`
 3. An output.txt file should be created under the root directory.
-4. Open the created file and check if the values are correct.
+4. The values in output.txt file are the result of the auctions read from input.txt file.
 
 
 ### Example:
