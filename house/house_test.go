@@ -1,7 +1,6 @@
-package auction
+package house
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -45,25 +44,32 @@ func TestAddItem(t *testing.T) {
 	}
 }
 
-func TestGetItemsStats(t *testing.T) {
+func TestGetStats(t *testing.T) {
 
-	resultItemsStas := GetItemsStats(winnersItemsTest, sellItemsTest)
-
-	fmt.Println(resultItemsStas)
+	resultItemsStas := GetStats(winnersItemsTest, sellItemsTest)
 
 	for i, result := range resultItemsStas {
 
-		if result.closeTime != itemStatsTests[i].closeTime {
-			t.Errorf("Closing price expected be %v. We got %v .", itemStatsTests[i].closeTime, result.closeTime)
+		if result.CloseTime != itemStatsTests[i].closeTime {
+			t.Errorf("Closing price expected be %v. We got %v .", itemStatsTests[i].closeTime, result.CloseTime)
 		}
-		if result.itemName != itemStatsTests[i].name {
-			t.Errorf("Item name expected be %v. We got %v .", itemStatsTests[i].name, result.itemName)
+		if result.Name != itemStatsTests[i].name {
+			t.Errorf("Item name expected be %v. We got %v .", itemStatsTests[i].name, result.Name)
 		}
-		if result.buyerID != itemStatsTests[i].userID {
-			t.Errorf("Buyer id expected be %v. We got %v .", itemStatsTests[i].userID, result.buyerID)
+		if result.BuyerID != itemStatsTests[i].userID {
+			t.Errorf("Buyer id expected be %v. We got %v .", itemStatsTests[i].userID, result.BuyerID)
 		}
-		if result.status != itemStatsTests[i].status {
-			t.Errorf("Item status status expected be %v. We got %v .", itemStatsTests[i].status, result.status)
+		if result.Status != itemStatsTests[i].status {
+			t.Errorf("Item status status expected be %v. We got %v .", itemStatsTests[i].status, result.Status)
+		}
+		if result.MaxPrice != itemStatsTests[i].highestPrice {
+			t.Errorf("Item status status expected be %v. We got %v .", itemStatsTests[i].highestPrice, result.MaxPrice)
+		}
+		if result.MinPrice != itemStatsTests[i].lowestPrice {
+			t.Errorf("Item status status expected be %v. We got %v .", itemStatsTests[i].lowestPrice, result.MinPrice)
+		}
+		if result.TotalBids != itemStatsTests[i].numberBids {
+			t.Errorf("Item status status expected be %v. We got %v .", itemStatsTests[i].numberBids, result.TotalBids)
 		}
 
 	}

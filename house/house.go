@@ -1,4 +1,6 @@
-package auction
+// Package house provides functions for retrieving the inputed auctions,
+// the winning bids and some stats
+package house
 
 import (
 	"log"
@@ -63,9 +65,6 @@ func GetAuctions(input []string) []Auction {
 				if err != nil {
 					log.Fatal(err)
 				}
-				// if a.CloseTime == '0' {
-
-				// }
 			}
 		}
 
@@ -74,50 +73,93 @@ func GetAuctions(input []string) []Auction {
 	return Auctions
 }
 
-//WinnerBid retrieves the highest bid for an item
-func WinnerBid(itm Item, b []Auction) Auction {
+//ItemStats stores some stats for each item
+type ItemStats struct {
+	CloseTime int64
+	Name      string
+	BuyerID   int
+	Status    string
+	PaidPrice float64
+	TotalBids int
+	MaxPrice  float64
+	MinPrice  float64
+}
+
+//iStats initializing stats for each item
+var iStats []ItemStats
+
+//initialize the max and min price of a valid bid
+var maxP, minP float64
+
+//outcome stores some stats for each item
+var outcome []ItemStats
+
+//WinnerBid retrieves the highest winning bid for an item
+func WinnerBid(itm Item, bid []Auction) Auction {
 
 	var winnerB Auction
-
+	var tempItem ItemStats
+	maxP = 0.0
+	//initiate an array with all my prices
+	var price []float64
 	//initialize the highest price with 0
 	winnerB.Price = 0
 	// initialise an counter for each match item
 	j := 1
-	for i := 0; i < len(b); i++ {
-		// var minP float64
-		if b[i].UserID == 0 {
+	var z int
+
+	for i := 0; i < len(bid); i++ {
+		//skip the heartbeat messages
+		if bid[i].UserID == 0 {
 			continue
 		}
 
-		if b[i].Item == itm.Name {
+		if bid[i].Item == itm.Name {
 
-			// minP := b[0].Price //assume the first price is the smallest
+			if bid[i].StartTime < itm.ExpirationTime {
+				//incrementor to count total valid bids for each item
+				z++
+				tempItem.Name = bid[i].Item
+				price = append(price, bid[i].Price)
+				if bid[i].Price > itm.Price && bid[i].Price > winnerB.Price {
+					j++
+					winnerB = bid[i]
+				}
+				tempItem.TotalBids = z
 
-			// 	bid.Price > winnerB.Price, "||",
-			// 	bid.Item == itm.Name, "||",
-			// 	bid.StartTime, itm.ExpirationTime, "||",
-			// 	bid.Price > itm.Price)
-			if b[i].Price > winnerB.Price && b[i].StartTime < itm.ExpirationTime && b[i].Price > itm.Price {
-				j++
-				winnerB = b[i]
+				if bid[i].Price > maxP {
+					maxP = bid[i].Price
+				}
+
+				minP = price[0]
+				if bid[i].Price < minP {
+					minP = bid[i].Price
+
+				}
+				tempItem.MaxPrice = maxP
+				tempItem.MinPrice = minP
 			}
+
 			//set a status for each bid
 			if winnerB.UserID != 0 {
 				winnerB.Status = "SOLD"
 			} else {
 				winnerB.Status = "UNSOLD"
 			}
+
 			//the buyer payes the price of the second highest
-			if len(b) > 2 && i > 0 && winnerB.UserID != 0 {
-				winnerB.Price = b[i-1].Price
+			if len(bid) > 2 && i > 0 && winnerB.UserID != 0 {
+				winnerB.Price = bid[i-1].Price
 			}
 
-			// fmt.Println(b[i].Price)
-			winnerB.Item = b[i].Item
+			winnerB.Item = bid[i].Item
 
 		}
 
 	}
+
+	outcome = append(outcome, tempItem)
+
 	return winnerB
 }
 
@@ -131,53 +173,24 @@ func (itm *Item) AddItem(new Auction) Item {
 	return *itm
 }
 
-// MaxPrice returns the larger of x or y.
-func MaxPrice(x, y float64) float64 {
-	if x > y {
-		return y
-	}
-	return x
-}
+//GetStats computes stats for each item in auction house
+func GetStats(winners []Auction, itemsList []Item) []ItemStats {
 
-// MinPrice returns the smaller of x or y.
-func MinPrice(x float64) float64 {
-	min := 0.0
-	if x > min {
-		return min
-	}
-	return x
-}
-
-//ItemStats stores some stats for each item
-type ItemStats struct {
-	CloseTime int64
-	ItemName  string
-	BuyerID   int
-	Status    string
-	PaidPrice float64
-	TotalBids int
-	MaxPrice  int64
-	MinPrice  int64
-}
-
-var iStats []ItemStats
-
-//GetItemsStats compute stats for each item in auction house
-func GetItemsStats(winners []Auction, itemsList []Item) []ItemStats {
-
-	var iS ItemStats
+	var itmS ItemStats
 
 	for i, winner := range winners {
-		iS.CloseTime = itemsList[i].ExpirationTime
-		iS.ItemName = winner.Item
-		iS.BuyerID = winner.UserID
-		iS.Status = winner.Status
-		iS.PaidPrice = winner.Price
-		iS.TotalBids = 0
-		iS.MaxPrice = 0
-		iS.MinPrice = 0
+		itmS.CloseTime = itemsList[i].ExpirationTime
+		itmS.Name = winner.Item
+		itmS.BuyerID = winner.UserID
+		itmS.Status = winner.Status
+		itmS.PaidPrice = winner.Price
+		if outcome[i].Name == winner.Item {
+			itmS.TotalBids = outcome[i].TotalBids
+			itmS.MaxPrice = outcome[i].MaxPrice
+			itmS.MinPrice = outcome[i].MinPrice
+		}
 
-		iStats = append(iStats, iS)
+		iStats = append(iStats, itmS)
 	}
 	return iStats
 }

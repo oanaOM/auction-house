@@ -6,11 +6,14 @@ import (
 	"log"
 	"os"
 
-	"github.com/oanaOM/auction-tracker/auction"
+	"github.com/oanaOM/auction-tracker/house"
 )
 
-var bids []auction.Auction
-var sellItems []auction.Item
+//bids stores all the auction of type bid
+var bids []house.Auction
+
+//store all items that are for sold
+var sellItems []house.Item
 
 func main() {
 
@@ -30,17 +33,15 @@ func main() {
 		inputs = append(inputs, scanner.Text())
 	}
 
-	//get the list of all listed
-	auction.GetAuctions(inputs)
+	//get the list of all inputs
+	house.GetAuctions(inputs)
 
-	// #######################
-
-	var sellItem auction.Item
+	//initialise an item that will be for sell
+	var sellItem house.Item
 
 	fmt.Println("=== Incoming auctions: ")
-	for _, a := range auction.Auctions {
+	for _, a := range house.Auctions {
 		//skip the hearthbeat moments
-		fmt.Printf("%+v\n", a)
 		if a.UserID != 0 {
 			if a.ActionType == "BID" {
 				bids = append(bids, a)
@@ -52,28 +53,27 @@ func main() {
 
 		}
 	}
-
-	var WinnerBids []auction.Auction
+	//WinnerBids stores the status for each item at the end of the auction
+	var results []house.Auction
 	var totalBids []int
 
 	//fmt.Println(bids)
 	for _, itm := range sellItems {
-		WinnerBids = append(WinnerBids, auction.WinnerBid(itm, bids))
+		results = append(results, house.WinnerBid(itm, bids))
 
 		//calculate total bids per item
-		var t int
-		t = auction.CountItemBids(itm.Name, bids)
+		t := house.CountItemBids(itm.Name, bids)
 		totalBids = append(totalBids, t)
 
 	}
 
-	resultItemsStas := auction.GetItemsStats(WinnerBids, sellItems)
+	finalStats := house.GetStats(results, sellItems)
 
 	// #### format the stats for each item as string
 	var output string
 
-	for _, result := range resultItemsStas {
-		output += fmt.Sprintf("|%v|%v|%v|%v|%v|%v|%v|%v|\n", result.CloseTime, result.ItemName, result.BuyerID, result.Status, result.PaidPrice, result.TotalBids, result.MaxPrice, result.MinPrice)
+	for _, result := range finalStats {
+		output += fmt.Sprintf("|%v|%v|%v|%v|%v|%v|%v|%v|\n", result.CloseTime, result.Name, result.BuyerID, result.Status, result.PaidPrice, result.TotalBids, result.MaxPrice, result.MinPrice)
 
 	}
 	//create a new file

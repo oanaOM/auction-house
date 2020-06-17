@@ -15,6 +15,16 @@ Please see full description in instructions.txt file
 4. The values in output.txt file are the result of the auctions read from input.txt file.
 
 
+## How to 
+
+
+1. ```cd house```
+2. Run `go test`. 
+The return results should be  
+PASS
+ok 
+
+
 ### Example:
 
 Input:

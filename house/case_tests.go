@@ -1,4 +1,4 @@
-package auction
+package house
 
 var auctions = []Auction{
 	// Auction{StartTime: 10, UserID: 1, ActionType: "SELL", Item: "toaster_1", Price: 10.00, CloseTime: 20.0},
