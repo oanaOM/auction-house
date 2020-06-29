@@ -73,7 +73,7 @@ func main() {
 	var output string
 
 	for _, result := range finalStats {
-		output += fmt.Sprintf("|%v|%v|%v|%v|%v|%v|%v|%v|\n", result.CloseTime, result.Name, result.BuyerID, result.Status, result.PaidPrice, result.TotalBids, result.MaxPrice, result.MinPrice)
+		output += fmt.Sprintf("%v|%v|%v|%v|%.2f|%d|%.2f|%.2f\n", result.CloseTime, result.Name, result.BuyerID, result.Status, result.PaidPrice, result.TotalBids, result.MaxPrice, result.MinPrice)
 
 	}
 	//create a new file

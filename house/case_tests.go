@@ -1,15 +1,11 @@
 package house
 
 var auctions = []Auction{
-	// Auction{StartTime: 10, UserID: 1, ActionType: "SELL", Item: "toaster_1", Price: 10.00, CloseTime: 20.0},
 	Auction{StartTime: 12, UserID: 8, ActionType: "BID", Item: "toaster_1", Price: 7.50},
 	Auction{StartTime: 13, UserID: 5, ActionType: "BID", Item: "toaster_1", Price: 12.50},
-	// Auction{StartTime: 15, UserID: 8, ActionType: "SELL", Item: "tv_1", Price: 250.00, CloseTime: 22.0},
-	// Auction{StartTime: 16},
 	Auction{StartTime: 17, UserID: 8, ActionType: "BID", Item: "toaster_1", Price: 20.00},
 	Auction{StartTime: 18, UserID: 1, ActionType: "BID", Item: "tv_1", Price: 150.00},
 	Auction{StartTime: 19, UserID: 3, ActionType: "BID", Item: "tv_1", Price: 200.00},
-	// Auction{StartTime: 20},
 	Auction{StartTime: 21, UserID: 3, ActionType: "BID", Item: "tv_1", Price: 300.00},
 }
 
