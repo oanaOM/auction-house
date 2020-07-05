@@ -22,6 +22,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failing to open :%v", err)
 	}
+	//close the file
+	defer file.Close()
+
 	//Read the file
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
@@ -53,11 +56,10 @@ func main() {
 
 		}
 	}
-	//WinnerBids stores the status for each item at the end of the auction
+	//results stores the status for each item at the end of the auction
 	var results []house.Auction
 	var totalBids []int
 
-	//fmt.Println(bids)
 	for _, itm := range sellItems {
 		results = append(results, house.WinnerBid(itm, bids))
 
